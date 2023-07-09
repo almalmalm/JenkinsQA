@@ -4,17 +4,22 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-public class BaseTest {
+import java.time.Duration;
+
+public abstract class BaseTest {
+
+    private WebDriverWait wait2;
 
     private WebDriver driver;
 
     @BeforeMethod
     protected void beforeMethod() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--remote-allow-origins=*", "--headless", "--window-size=1920,1080");
+        //chromeOptions.addArguments("--remote-allow-origins=*", "--headless", "--window-size=1920,1080");
         WebDriverManager.chromedriver().setup();
 
         driver = new ChromeDriver(chromeOptions);
@@ -27,5 +32,12 @@ public class BaseTest {
 
     protected WebDriver getDriver() {
         return driver;
+    }
+
+    public WebDriverWait getWait2() {
+        if(wait2 == null) {
+            wait2 = new WebDriverWait(getDriver(), Duration.ofSeconds(2));
+        }
+        return wait2;
     }
 }
